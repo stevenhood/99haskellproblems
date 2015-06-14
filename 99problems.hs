@@ -16,7 +16,7 @@ myButLast = head . tail . reverse
 elementAt :: [a] -> Int -> a
 elementAt (x:_) 1 = x
 elementAt (x:xs) n
-    | n < 1 = error "Index out of bounds"
+    | n < 1 = error "elementAt: index too large"
     | otherwise = elementAt xs (n - 1)
 
 -- 4. Find the number of elements of a list.
@@ -110,3 +110,30 @@ dropEvery xs n = helper xs n 1
           helper (x:xs) m k
               | m == k    = helper xs m 1
               | otherwise = x : helper xs m (k + 1)
+
+-- 17. Split a list into two parts; the length of the first part is given.
+--     Do not use any predefined predicates.
+-- Wrong: Using predefined predicates
+-- split :: [a] -> Int -> ([a], [a])
+-- split xs = (take n xs, drop n xs)
+-- TODO
+
+-- 18. Extract a slice from a list.
+--     Given two indices, i and k, the slice is the list containing the
+--     elements between the i'th and k'th element of the original list (both
+--     limits included). Start counting the elements with 1.
+slice :: [a] -> Int -> Int -> [a]
+slice xs i k =  take (k - i + 1) $ drop (i - 1) xs
+
+-- 19. Rotate a list N places to the left.
+--     Hint: Use the predefined functions length and (++).
+rotate :: [a] -> Int -> [a]
+rotate xs n = take len $ drop (n `mod` len) $ cycle xs
+    where len = length xs
+
+-- 20. Remove the K'th element from a list.
+removeAt :: Int -> [a] -> (a, [a])
+removeAt k xs = case back of
+        [] -> error "removeAt: index too large"
+        x:rest -> (x, front ++ rest)
+    where (front, back) = splitAt (k - 1) xs
