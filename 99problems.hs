@@ -66,3 +66,47 @@ pack (x:xs) = dups : pack rest
 --     the number of duplicates of the element E.
 encode :: Eq a => [a] -> [(Int, a)]
 encode = map (\xs -> (length xs, head xs)) . pack
+
+-- 11. Modified run-length encoding.
+--     Modify the result of problem 10 in such a way that if an element has no
+--     duplicates it is simply copied into the result list. Only elements with
+--     duplicates are transferred as (N E) lists.
+data Encode a = Multiple Int a | Single a
+    deriving Show
+
+encodeModified :: Eq a => [a] -> [Encode a]
+encodeModified = map f . encode
+    where f (1, x) = Single x
+          f (n, x) = Multiple n x
+
+-- 12. Decode a run-length encoded list.
+--     Given a run-length code list generated as specified in problem 11.
+--     Construct its uncompressed version.
+decodeModified :: Eq a => [Encode a] -> [a]
+decodeModified = concatMap f
+    where f (Single x) = [x]
+          f (Multiple n x) = replicate n x
+
+-- 13. Run-length encoding of a list (direct solution).
+-- Implement the so-called run-length encoding data compression method
+-- directly. I.e. don't explicitly create the sublists containing the
+-- duplicates, as in problem 9, but only count them. As in problem P11,
+-- simplify the result list by replacing the singleton lists (1 X) by X.
+-- encodeDirect :: Eq a => [a] -> [Encode a]
+-- TODO
+
+-- 14. Duplicate the elements of a list.
+dupli :: [a] -> [a]
+dupli = concatMap (\x -> [x, x])
+
+-- 15. Replicate the elements of a list a given number of times.
+repli :: [a] -> Int -> [a]
+repli xs n = concatMap (replicate n) xs
+
+-- 16. Drop every N'th element from a list.
+dropEvery :: [a] -> Int -> [a]
+dropEvery xs n = helper xs n 1
+    where helper [] _ _ = []
+          helper (x:xs) m k
+              | m == k    = helper xs m 1
+              | otherwise = x : helper xs m (k + 1)
