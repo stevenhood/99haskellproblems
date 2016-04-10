@@ -137,3 +137,39 @@ removeAt k xs = case back of
         [] -> error "removeAt: index too large"
         x:rest -> (x, front ++ rest)
     where (front, back) = splitAt (k - 1) xs
+
+-- 21. Insert an element at a given position into a list.
+insertAt :: a -> [a] -> Int -> [a]
+insertAt x l 1 = x : l
+insertAt x (y:ys) n = y : insertAt x ys (n - 1)
+
+-- 22. Create a list containing all integers within a given range.
+range :: Int -> Int -> [Int]
+range n m = [n..m]
+
+-- 23. Create a list containing all integers within a given range.
+-- TODO
+
+-- 24. Lotto: Draw N different random numbers from the set 1..M.
+-- TODO
+
+-- 25. Generate a random permutation of the elements of a list.
+-- TODO
+
+-- 31. Generate a random permutation of the elements of a list.
+isPrime :: Int -> Bool
+isPrime n = factors n == [1,n]
+
+factors :: Int -> [Int]
+factors n = [x | x <- [1..n], n `mod` x == 0]
+
+-- 32. Determine the greatest common divisor of two positive integer numbers.
+-- Use Euclid's algorithm.
+myGcd :: Int -> Int -> Int
+myGcd a 0 = a
+myGcd a b = myGcd b (a `mod` b)
+
+-- 33. Determine whether two positive integer numbers are coprime.
+-- Two numbers are coprime if their greatest common divisor equals 1.
+coprime :: Int -> Int -> Bool
+coprime x y = myGcd x y == 1
